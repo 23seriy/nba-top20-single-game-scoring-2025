@@ -1,7 +1,7 @@
 import React from 'react';
-import { AbsoluteFill, Sequence, useVideoConfig } from '@remotion/core';
-import { PlayerCard } from './PlayerCard';
+import { Sequence, useVideoConfig } from 'remotion';
 import { ScoringRecord } from '../types';
+import { PlayerCard } from './PlayerCard';
 
 interface CountdownSectionProps {
   records: ScoringRecord[];
@@ -34,7 +34,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
     let currentFrame = 0;
 
     return (
-      <AbsoluteFill>
+      <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
         {sectionRecords.map((record, index) => {
           const duration = getPlayerDuration(record.rank);
           const sequenceStart = currentFrame;
@@ -58,13 +58,16 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
             </Sequence>
           );
         })}
-      </AbsoluteFill>
+      </div>
     );
   } catch (error) {
     console.error('Error in CountdownSection:', error);
     return (
-      <AbsoluteFill
+      <div
         style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
           background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
           display: 'flex',
           alignItems: 'center',
@@ -75,7 +78,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
         }}
       >
         Error loading countdown section
-      </AbsoluteFill>
+      </div>
     );
   }
 };

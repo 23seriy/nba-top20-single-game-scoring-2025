@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, interpolate } from '@remotion/core';
+import { useCurrentFrame, interpolate } from '@remotion/core';
 
 interface OutroSectionProps {
   format: 'youtube' | 'shorts' | 'square';
@@ -40,8 +40,11 @@ export const OutroSection: React.FC<OutroSectionProps> = ({ format }) => {
   const styles = getLayoutStyles();
 
   return (
-    <AbsoluteFill
+    <div
       style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
         background: 'linear-gradient(135deg, #0f3460, #16213e, #1a1a2e)',
         display: 'flex',
         flexDirection: 'column',
@@ -109,6 +112,6 @@ export const OutroSection: React.FC<OutroSectionProps> = ({ format }) => {
       >
         🏀 🏆 🏀
       </div>
-    </AbsoluteFill>
+    </div>
   );
 };

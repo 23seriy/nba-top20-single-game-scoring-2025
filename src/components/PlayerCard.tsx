@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, interpolate } from '@remotion/core';
+import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
 import { ScoringRecord } from '../types';
 
 interface PlayerCardProps {
@@ -14,10 +14,27 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
   const [imageError, setImageError] = useState(false);
   const [gameImageError, setGameImageError] = useState(false);
 
-  // Animation timing
-  const cardEnter = interpolate(frame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
-  const textReveal = interpolate(frame, [15, 45], [0, 1], { extrapolateRight: 'clamp' });
-  const pointsReveal = interpolate(frame, [30, 60], [0, 1], { extrapolateRight: 'clamp' });
+  // Validate record data to prevent NaN values
+  const safeRecord = {
+    ...record,
+    rank: Number(record.rank) || 1,
+    points: Number(record.points) || 0,
+    player: String(record.player || 'Unknown Player'),
+    date: String(record.date || 'Unknown Date'),
+    opponent: String(record.opponent || 'Unknown Opponent'),
+    venue: String(record.venue || 'Unknown Venue'),
+    context: String(record.context || 'No context available'),
+    teamColors: {
+      primary: String(record.teamColors?.primary || '#1D428A'),
+      secondary: String(record.teamColors?.secondary || '#FFC72C')
+    }
+  };
+
+  // Animation timing with safe frame values
+  const safeFrame = Number(frame) || 0;
+  const cardEnter = interpolate(safeFrame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
+  const textReveal = interpolate(safeFrame, [15, 45], [0, 1], { extrapolateRight: 'clamp' });
+  const pointsReveal = interpolate(safeFrame, [30, 60], [0, 1], { extrapolateRight: 'clamp' });
 
   // Local fallback component for player images
   const PlayerImageFallback = ({ initials, colors }: { initials: string; colors: { primary: string; secondary: string } }) => (
@@ -90,8 +107,13 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
 
   try {
     return (
-      <AbsoluteFill
+      <div
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
           display: 'flex',
           ...styles.container,
@@ -103,13 +125,13 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         <div
           style={{
             ...styles.rank,
-            color: record.teamColors.secondary,
+            color: safeRecord.teamColors.secondary,
             fontWeight: 'bold',
             textShadow: '3px 3px 6px rgba(0,0,0,0.7)',
             opacity: textReveal,
           }}
         >
-          #{record.rank}
+          #{safeRecord.rank}
         </div>
 
         {/* Player Image Container */}
@@ -119,29 +141,14 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             position: 'relative',
             borderRadius: '50%',
             overflow: 'hidden',
-            border: `6px solid ${record.teamColors.primary}`,
+            border: `6px solid ${safeRecord.teamColors.primary}`,
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
           }}
         >
-          {!imageError ? (
-            <Img
-              src={`/assets/players/${record.playerImage}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-              onError={() => {
-                console.error(`Failed to load player image: ${record.playerImage}`);
-                setImageError(true);
-              }}
-            />
-          ) : (
-            <PlayerImageFallback
-              initials={getPlayerInitials(record.player)}
-              colors={record.teamColors}
-            />
-          )}
+          <PlayerImageFallback
+            initials={getPlayerInitials(safeRecord.player)}
+            colors={safeRecord.teamColors}
+          />
         </div>
 
         {/* Text Content */}
@@ -162,21 +169,21 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
               textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
             }}
           >
-            {record.player}
+            {safeRecord.player}
           </div>
 
           {/* Points */}
           <div
             style={{
               ...styles.points,
-              color: record.teamColors.secondary,
+              color: safeRecord.teamColors.secondary,
               fontWeight: 'bold',
               textShadow: '3px 3px 6px rgba(0,0,0,0.7)',
               opacity: pointsReveal,
               transform: `scale(${0.8 + pointsReveal * 0.2})`,
             }}
           >
-            {record.points} POINTS
+            {safeRecord.points} POINTS
           </div>
 
           {/* Game Details */}
@@ -188,20 +195,20 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             }}
           >
             <div style={{ marginBottom: '10px' }}>
-              <strong>{record.date}</strong>
+              <strong>{safeRecord.date}</strong>
             </div>
             <div style={{ marginBottom: '10px' }}>
-              vs {record.opponent}
+              vs {safeRecord.opponent}
             </div>
             <div style={{ marginBottom: '10px' }}>
-              {record.venue}
+              {safeRecord.venue}
             </div>
             <div style={{ 
               fontStyle: 'italic',
-              color: record.teamColors.secondary,
+              color: safeRecord.teamColors.secondary,
               fontSize: format === 'youtube' ? '32px' : format === 'shorts' ? '22px' : '26px'
             }}>
-              {record.context}
+              {safeRecord.context}
             </div>
           </div>
         </div>
@@ -217,51 +224,41 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
               height: format === 'youtube' ? '200px' : '130px',
               borderRadius: '15px',
               overflow: 'hidden',
-              border: `3px solid ${record.teamColors.primary}`,
+              border: `3px solid ${safeRecord.teamColors.primary}`,
               boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
-              opacity: interpolate(frame, [60, 90], [0, 1], { extrapolateRight: 'clamp' }),
+              opacity: interpolate(safeFrame, [60, 90], [0, 1], { extrapolateRight: 'clamp' }),
             }}
           >
-            {!gameImageError ? (
-              <Img
-                src={`/assets/games/${record.gameImage}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-                onError={() => {
-                  console.error(`Failed to load game image: ${record.gameImage}`);
-                  setGameImageError(true);
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  background: `linear-gradient(135deg, ${record.teamColors.primary}, ${record.teamColors.secondary})`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: format === 'youtube' ? '24px' : '16px',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}
-              >
-                GAME<br/>FOOTAGE
-              </div>
-            )}
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                background: `linear-gradient(135deg, ${safeRecord.teamColors.primary}, ${safeRecord.teamColors.secondary})`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: format === 'youtube' ? '24px' : '16px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              GAME<br/>FOOTAGE
+            </div>
           </div>
         )}
-      </AbsoluteFill>
+      </div>
     );
   } catch (error) {
     console.error('Error rendering PlayerCard:', error);
     return (
-      <AbsoluteFill
+      <div
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
           display: 'flex',
           alignItems: 'center',
@@ -271,8 +268,8 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           textAlign: 'center',
         }}
       >
-        Error loading player #{record.rank}
-      </AbsoluteFill>
+        Error loading player #{safeRecord.rank}
+      </div>
     );
   }
 };

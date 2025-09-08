@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, interpolate, useVideoConfig } from '@remotion/core';
+import { useCurrentFrame, interpolate, useVideoConfig } from '@remotion/core';
 
 interface IntroSectionProps {
   format: 'youtube' | 'shorts' | 'square';
@@ -41,8 +41,13 @@ export const IntroSection: React.FC<IntroSectionProps> = ({ format }) => {
   const styles = getLayoutStyles();
 
   return (
-    <AbsoluteFill
+    <div
       style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
         display: 'flex',
         flexDirection: 'column',
@@ -110,6 +115,6 @@ export const IntroSection: React.FC<IntroSectionProps> = ({ format }) => {
       >
         🏀
       </div>
-    </AbsoluteFill>
+    </div>
   );
 };
