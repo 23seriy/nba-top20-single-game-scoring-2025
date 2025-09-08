@@ -1,10 +1,12 @@
 import React from 'react';
 import { Composition } from 'remotion';
-import { NBATop20ScoringYouTube } from './components/NBATop20ScoringYouTube';
-import { NBATop20ScoringShortsPart1 } from './components/NBATop20ScoringShortsPart1';
-import { NBATop20ScoringShortsPart2 } from './components/NBATop20ScoringShortsPart2';
-import { NBATop20ScoringSquare } from './components/NBATop20ScoringSquare';
-import { NBATop20ScoringThumbnail } from './components/NBATop20ScoringThumbnail';
+import {
+  NBATop20ScoringYouTube,
+  NBATop20ScoringShortsPart1,
+  NBATop20ScoringShortsPart2,
+  NBATop20ScoringSquare,
+  NBATop20ScoringThumbnail
+} from './components';
 import scoringData from '../data/top20_single_game_scoring.json';
 import { ScoringRecord } from './types';
 
