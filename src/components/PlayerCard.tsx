@@ -48,7 +48,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: format === 'youtube' ? '120px' : format === 'shorts' ? '80px' : '100px',
+        fontSize: format === 'youtube' ? '120px' : format === 'shorts' ? '200px' : '200px',
         fontWeight: 'bold',
         color: 'white',
         textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
@@ -169,7 +169,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: format === 'youtube' ? '24px' : format === 'shorts' ? '16px' : '20px',
+          fontSize: format === 'youtube' ? '24px' : format === 'shorts' ? '46px' : '30px',
           fontWeight: 'bold',
           color: 'white',
           textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
@@ -188,7 +188,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
       case 'youtube':
         return {
           container: { flexDirection: 'row' as const, padding: '60px' },
-          imageContainer: { width: '500px', height: '500px', marginRight: '80px' },
+          imageContainer: { width: '600px', height: '600px', marginRight: '80px', marginTop: '200px' },
           textContainer: { flex: 1, justifyContent: 'center' as const },
           playerName: { fontSize: '72px', marginBottom: '20px' },
           points: { fontSize: '120px', marginBottom: '30px' },
@@ -197,13 +197,13 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         };
       case 'shorts':
         return {
-          container: { flexDirection: 'column' as const, padding: '40px', alignItems: 'center' as const },
-          imageContainer: { width: '300px', height: '300px', marginBottom: '40px' },
+          container: { flexDirection: 'column' as const, padding: '20px', alignItems: 'center' as const },
+          imageContainer: { width: '700px', height: '700px', marginBottom: '200px', marginTop: '300px' },
           textContainer: { width: '100%', alignItems: 'center' as const },
-          playerName: { fontSize: '48px', marginBottom: '15px', textAlign: 'center' as const },
-          points: { fontSize: '80px', marginBottom: '20px' },
-          details: { fontSize: '24px', lineHeight: '1.3', textAlign: 'center' as const },
-          rank: { fontSize: '120px', position: 'absolute' as const, top: '20px', right: '30px' }
+          playerName: { fontSize: '68px', marginBottom: '15px', textAlign: 'center' as const },
+          points: { fontSize: '90px', marginBottom: '20px' },
+          details: { fontSize: '44px', lineHeight: '1.3', textAlign: 'center' as const },
+          rank: { fontSize: '140px', position: 'absolute' as const, top: '20px', right: '30px' }
         };
       case 'square':
         return {
@@ -251,10 +251,10 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         <div
           style={{
             position: 'absolute',
-            top: format === 'youtube' ? '30px' : '20px',
-            left: format === 'youtube' ? '30px' : '20px',
-            width: format === 'youtube' ? '100px' : format === 'shorts' ? '60px' : '80px',
-            height: format === 'youtube' ? '100px' : format === 'shorts' ? '60px' : '80px',
+            top: format === 'youtube' ? '30px' : '30px',
+            left: format === 'youtube' ? '30px' : '30px',
+            width: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '150px',
+            height: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '150px',
             borderRadius: '50%',
             overflow: 'hidden',
             border: '3px solid white',
