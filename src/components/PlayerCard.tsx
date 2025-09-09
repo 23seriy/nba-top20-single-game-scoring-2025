@@ -13,6 +13,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
   const { fps } = useVideoConfig();
   const [imageError, setImageError] = useState(false);
   const [gameImageError, setGameImageError] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   // Validate record data to prevent NaN values
   const safeRecord = {
@@ -92,6 +93,95 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
     }
   };
 
+  // Get team initials for logo fallback
+  const getTeamInitials = (teamName: string): string => {
+    try {
+      // Handle special cases first
+      const specialCases: { [key: string]: string } = {
+        'Los Angeles Lakers': 'LAL',
+        'Philadelphia Warriors': 'PHW',
+        'San Francisco Warriors': 'SFW',
+        'Dallas Mavericks': 'DAL',
+        'Denver Nuggets': 'DEN',
+        'Portland Trail Blazers': 'POR',
+        'Cleveland Cavaliers': 'CLE',
+        'San Antonio Spurs': 'SAS',
+        'Philadelphia 76ers': 'PHI',
+        'Phoenix Suns': 'PHX',
+        'New York Knicks': 'NYK',
+        'Toronto Raptors': 'TOR',
+        'Atlanta Hawks': 'ATL',
+        'Houston Rockets': 'HOU',
+        'Chicago Bulls': 'CHI',
+        'Los Angeles Clippers': 'LAC',
+        'Boston Celtics': 'BOS',
+        'Detroit Pistons': 'DET',
+        'Chicago Packers': 'CHI',
+        'Syracuse Nationals': 'SYR'
+      };
+
+      if (specialCases[teamName]) {
+        return specialCases[teamName];
+      }
+
+      // Default: take first letter of each word
+      return teamName.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 3);
+    } catch (error) {
+      console.error('Error getting team initials:', error);
+      return 'NBA';
+    }
+  };
+
+  // Generate team logo path
+  const getTeamLogoPath = (teamName: string): string => {
+    try {
+      const slug = teamName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+        .replace(/\s+/g, '_') // Replace spaces with underscores
+        .trim();
+      
+      // Import the logo directly from src/assets
+      try {
+        const logoPath = require(`../assets/logos/${slug}.svg`);
+        console.log(`Loaded logo for ${teamName}:`, logoPath);
+        return logoPath;
+      } catch (requireError) {
+        console.log(`No logo found for ${teamName}, using fallback`);
+        return '';
+      }
+    } catch (error) {
+      console.error('Error generating logo path:', error);
+      return '';
+    }
+  };
+
+  // Team logo fallback component
+  const TeamLogoFallback = ({ teamName, colors }: { teamName: string; colors: { primary: string; secondary: string } }) => {
+    const initials = getTeamInitials(teamName);
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+          background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: format === 'youtube' ? '24px' : format === 'shorts' ? '16px' : '20px',
+          fontWeight: 'bold',
+          color: 'white',
+          textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+          border: '2px solid white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+        }}
+      >
+        {initials}
+      </div>
+    );
+  };
+
   // Format-specific styling
   const getLayoutStyles = () => {
     switch (format) {
@@ -157,6 +247,44 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           transform: `scale(${0.8 + cardEnter * 0.2})`,
         }}
       >
+        {/* Team Logo - Top Left Corner */}
+        <div
+          style={{
+            position: 'absolute',
+            top: format === 'youtube' ? '30px' : '20px',
+            left: format === 'youtube' ? '30px' : '20px',
+            width: format === 'youtube' ? '100px' : format === 'shorts' ? '60px' : '80px',
+            height: format === 'youtube' ? '100px' : format === 'shorts' ? '60px' : '80px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            border: '3px solid white',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+            opacity: textReveal,
+            transform: `scale(${0.8 + textReveal * 0.2})`,
+            zIndex: 10,
+          }}
+        >
+          {getTeamLogoPath(safeRecord.team) && !logoError ? (
+            <img
+              src={getTeamLogoPath(safeRecord.team)}
+              alt={`${safeRecord.team} logo`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              onError={(e) => {
+                console.error(`Failed to load logo for ${safeRecord.team}:`, e.currentTarget.src);
+                setLogoError(true);
+              }}
+            />
+          ) : (
+            <TeamLogoFallback
+              teamName={safeRecord.team}
+              colors={safeRecord.teamColors}
+            />
+          )}
+        </div>
         {/* Rank Number */}
         <div
           style={{
@@ -201,6 +329,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
               colors={safeRecord.teamColors}
             />
           )}
+
         </div>
 
         {/* Text Content */}
