@@ -3,17 +3,17 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { ScoringRecord } from '../types';
 import { CountdownSection } from './CountdownSection';
 
-interface NBATop20ScoringShortsPart2Props {
+interface NBATop15ScoringShortsPart2Props {
   records?: ScoringRecord[];
 }
 
-export const NBATop20ScoringShortsPart2: React.FC<NBATop20ScoringShortsPart2Props> = ({ 
+export const NBATop15ScoringShortsPart2: React.FC<NBATop15ScoringShortsPart2Props> = ({ 
   records = [] 
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Shorts Part 2: Rankings 10-1 (Top 10)
+  // Shorts Part 2: Rankings 8-1 (Top 8)
   return (
     <div style={{
       width: '100%',
@@ -24,7 +24,7 @@ export const NBATop20ScoringShortsPart2: React.FC<NBATop20ScoringShortsPart2Prop
       <CountdownSection
         records={records}
         format="shorts"
-        startRank={10}
+        startRank={8}
         endRank={1}
       />
     </div>

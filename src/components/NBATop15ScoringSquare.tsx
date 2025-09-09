@@ -3,17 +3,17 @@ import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { ScoringRecord } from '../types';
 import { CountdownSection } from './CountdownSection';
 
-interface NBATop20ScoringYouTubeProps {
+interface NBATop15ScoringSquareProps {
   records?: ScoringRecord[];
 }
 
-export const NBATop20ScoringYouTube: React.FC<NBATop20ScoringYouTubeProps> = ({ 
+export const NBATop15ScoringSquare: React.FC<NBATop15ScoringSquareProps> = ({ 
   records = [] 
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // YouTube format: Full countdown from 20 to 1
+  // Square format: Condensed countdown from 15 to 1
   return (
     <div style={{
       width: '100%',
@@ -23,8 +23,8 @@ export const NBATop20ScoringYouTube: React.FC<NBATop20ScoringYouTubeProps> = ({
     }}>
       <CountdownSection
         records={records}
-        format="youtube"
-        startRank={20}
+        format="square"
+        startRank={15}
         endRank={1}
       />
     </div>

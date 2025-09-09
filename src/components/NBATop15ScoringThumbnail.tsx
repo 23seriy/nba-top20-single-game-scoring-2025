@@ -1,12 +1,12 @@
 import React from 'react';
 import { ScoringRecord } from '../types';
 
-interface NBATop20ScoringThumbnailProps {
+interface NBATop15ScoringThumbnailProps {
   records?: ScoringRecord[];
   format?: 'youtube' | 'shorts' | 'square';
 }
 
-export const NBATop20ScoringThumbnail: React.FC<NBATop20ScoringThumbnailProps> = ({ 
+export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> = ({ 
   records = [],
   format = 'youtube'
 }) => {
@@ -34,7 +34,7 @@ export const NBATop20ScoringThumbnail: React.FC<NBATop20ScoringThumbnailProps> =
         marginBottom: '20px',
         textAlign: 'center'
       }}>
-        NBA TOP 20
+        NBA TOP 15
       </div>
       
       {/* Subtitle */}

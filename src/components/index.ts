@@ -1,7 +1,7 @@
-export { NBATop20ScoringYouTube } from './NBATop20ScoringYouTube';
-export { NBATop20ScoringShortsPart1 } from './NBATop20ScoringShortsPart1';
-export { NBATop20ScoringShortsPart2 } from './NBATop20ScoringShortsPart2';
-export { NBATop20ScoringSquare } from './NBATop20ScoringSquare';
-export { NBATop20ScoringThumbnail } from './NBATop20ScoringThumbnail';
+export { NBATop15ScoringYouTube } from './NBATop15ScoringYouTube';
+export { NBATop15ScoringShortsPart1 } from './NBATop15ScoringShortsPart1';
+export { NBATop15ScoringShortsPart2 } from './NBATop15ScoringShortsPart2';
+export { NBATop15ScoringSquare } from './NBATop15ScoringSquare';
+export { NBATop15ScoringThumbnail } from './NBATop15ScoringThumbnail';
 export { CountdownSection } from './CountdownSection';
 export { PlayerCard } from './PlayerCard';

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Composition } from 'remotion';
 import {
-  NBATop20ScoringYouTube,
-  NBATop20ScoringShortsPart1,
-  NBATop20ScoringShortsPart2,
-  NBATop20ScoringSquare,
-  NBATop20ScoringThumbnail
+  NBATop15ScoringYouTube,
+  NBATop15ScoringShortsPart1,
+  NBATop15ScoringShortsPart2,
+  NBATop15ScoringSquare,
+  NBATop15ScoringThumbnail
 } from './components';
 import scoringData from '../data/top20_single_game_scoring.json';
 import { ScoringRecord } from './types';
@@ -39,8 +39,8 @@ export const RemotionRoot = () => {
     <>
       {/* Main Video Compositions */}
       <Composition
-        id="NBATop20Scoring-YouTube"
-        component={NBATop20ScoringYouTube}
+        id="NBATop15Scoring-YouTube"
+        component={NBATop15ScoringYouTube}
         durationInFrames={3600}
         fps={30}
         width={1920}
@@ -49,8 +49,8 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop20Scoring-ShortsPart1"
-        component={NBATop20ScoringShortsPart1}
+        id="NBATop15Scoring-ShortsPart1"
+        component={NBATop15ScoringShortsPart1}
         durationInFrames={1800}
         fps={30}
         width={1080}
@@ -59,8 +59,8 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop20Scoring-ShortsPart2"
-        component={NBATop20ScoringShortsPart2}
+        id="NBATop15Scoring-ShortsPart2"
+        component={NBATop15ScoringShortsPart2}
         durationInFrames={1800}
         fps={30}
         width={1080}
@@ -69,8 +69,8 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop20Scoring-Square"
-        component={NBATop20ScoringSquare}
+        id="NBATop15Scoring-Square"
+        component={NBATop15ScoringSquare}
         durationInFrames={2400}
         fps={30}
         width={1080}
@@ -80,8 +80,8 @@ export const RemotionRoot = () => {
 
       {/* Thumbnail Compositions */}
       <Composition
-        id="NBATop20Scoring-YouTubeThumbnail"
-        component={NBATop20ScoringThumbnail}
+        id="NBATop15Scoring-YouTubeThumbnail"
+        component={NBATop15ScoringThumbnail}
         durationInFrames={1}
         fps={30}
         width={1280}
@@ -90,8 +90,8 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop20Scoring-ShortsThumbnail"
-        component={NBATop20ScoringThumbnail}
+        id="NBATop15Scoring-ShortsThumbnail"
+        component={NBATop15ScoringThumbnail}
         durationInFrames={1}
         fps={30}
         width={1280}
@@ -100,8 +100,8 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop20Scoring-SquareThumbnail"
-        component={NBATop20ScoringThumbnail}
+        id="NBATop15Scoring-SquareThumbnail"
+        component={NBATop15ScoringThumbnail}
         durationInFrames={1}
         fps={30}
         width={1280}
