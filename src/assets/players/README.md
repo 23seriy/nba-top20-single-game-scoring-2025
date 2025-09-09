@@ -17,7 +17,24 @@ assets/
 - **Format**: JPG or PNG
 - **Resolution**: Minimum 800x800px (square format preferred)
 - **Quality**: High resolution for crisp display
-- **Naming**: Use exact filename from data (e.g., `wilt_chamberlain.jpg`)
+- **Naming**: Use rank-padded prefix with player name slug (e.g., `01-wilt-chamberlain.jpg`)
+
+#### Expected Player Image Files (Top 15 Single Game Scoring Records)
+1. `01-wilt-chamberlain.jpg` - Wilt Chamberlain (100 points)
+2. `02-kobe-bryant.jpg` - Kobe Bryant (81 points)
+3. `03-wilt-chamberlain.jpg` - Wilt Chamberlain (78 points)
+4. `04-luka-doni.jpg` - Luka Dončić (73 points)
+5. `05-david-thompson.jpg` - David Thompson (73 points)
+6. `06-wilt-chamberlain.jpg` - Wilt Chamberlain (73 points)
+7. `07-wilt-chamberlain.jpg` - Wilt Chamberlain (73 points)
+8. `08-wilt-chamberlain.jpg` - Wilt Chamberlain (72 points)
+9. `09-damian-lillard.jpg` - Damian Lillard (71 points)
+10. `10-donovan-mitchell.jpg` - Donovan Mitchell (71 points)
+11. `11-david-robinson.jpg` - David Robinson (71 points)
+12. `12-elgin-baylor.jpg` - Elgin Baylor (71 points)
+13. `13-joel-embiid.jpg` - Joel Embiid (70 points)
+14. `14-devin-booker.jpg` - Devin Booker (70 points)
+15. `15-wilt-chamberlain.jpg` - Wilt Chamberlain (70 points)
 
 ### Game Images (`/games/`)
 - **Format**: JPG or PNG  
