@@ -2,6 +2,7 @@ import React from 'react';
 import { Sequence, useVideoConfig } from 'remotion';
 import { ScoringRecord } from '../types';
 import { PlayerCard } from './PlayerCard';
+import { VideoFootage } from './VideoFootage';
 
 interface CountdownSectionProps {
   records: ScoringRecord[];
@@ -23,11 +24,15 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
     record.rank >= endRank && record.rank <= startRank
   ).sort((a, b) => b.rank - a.rank); // Sort descending (20 -> 1)
 
-  // Duration per player (in frames)
-  const getPlayerDuration = (rank: number): number => {
-    if (rank <= 5) return 240; // 8 seconds for top 5
-    if (rank <= 10) return 180; // 6 seconds for top 10
-    return 150; // 5 seconds for others
+  // Duration per player (in frames) - split between player card and video
+  const getPlayerCardDuration = (rank: number): number => {
+    if (rank <= 5) return 120; // 4 seconds for top 5 player card
+    if (rank <= 10) return 90; // 3 seconds for top 10 player card
+    return 75; // 2.5 seconds for others player card
+  };
+
+  const getVideoDuration = (rank: number): number => {
+    return 90; // 3 seconds for all videos (90 frames at 30fps)
   };
 
   try {
@@ -36,26 +41,43 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
     return (
       <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
         {sectionRecords.map((record, index) => {
-          const duration = getPlayerDuration(record.rank);
+          const playerCardDuration = getPlayerCardDuration(record.rank);
+          const videoDuration = getVideoDuration(record.rank);
+          const totalDuration = playerCardDuration + videoDuration;
           const sequenceStart = currentFrame;
           
           // Update frame counter for next player
-          currentFrame += duration;
+          currentFrame += totalDuration;
 
-          console.log(`Rendering player ${record.player} (#${record.rank}) at frames ${sequenceStart}-${sequenceStart + duration}`);
+          console.log(`Rendering player ${record.player} (#${record.rank}) at frames ${sequenceStart}-${sequenceStart + totalDuration}`);
+          console.log(`  - Player card: ${sequenceStart}-${sequenceStart + playerCardDuration}`);
+          console.log(`  - Video footage: ${sequenceStart + playerCardDuration}-${sequenceStart + totalDuration}`);
 
           return (
-            <Sequence
-              key={`${record.rank}-${record.player}`}
-              from={sequenceStart}
-              durationInFrames={duration}
-            >
-              <PlayerCard
-                record={record}
-                format={format}
-                showGameFootage={record.rank <= 10} // Show game footage for top 10
-              />
-            </Sequence>
+            <React.Fragment key={`${record.rank}-${record.player}`}>
+              {/* Player Card Sequence */}
+              <Sequence
+                from={sequenceStart}
+                durationInFrames={playerCardDuration}
+              >
+                <PlayerCard
+                  record={record}
+                  format={format}
+                  showGameFootage={false} // Remove the old game footage overlay
+                />
+              </Sequence>
+              
+              {/* Video Footage Sequence */}
+              <Sequence
+                from={sequenceStart + playerCardDuration}
+                durationInFrames={videoDuration}
+              >
+                <VideoFootage
+                  record={record}
+                  format={format}
+                />
+              </Sequence>
+            </React.Fragment>
           );
         })}
       </div>

@@ -5,3 +5,4 @@ export { NBATop15ScoringSquare } from './NBATop15ScoringSquare';
 export { NBATop15ScoringThumbnail } from './NBATop15ScoringThumbnail';
 export { CountdownSection } from './CountdownSection';
 export { PlayerCard } from './PlayerCard';
+export { VideoFootage } from './VideoFootage';
