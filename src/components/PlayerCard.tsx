@@ -132,7 +132,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
     }
   };
 
-  // Generate team logo path
+  // Generate team logo path with fallback support for .svg and .jpg
   const getTeamLogoPath = (teamName: string): string => {
     try {
       const slug = teamName
@@ -141,14 +141,20 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         .replace(/\s+/g, '_') // Replace spaces with underscores
         .trim();
       
-      // Import the logo directly from src/assets
+      // Try SVG first, then JPG as fallback
       try {
         const logoPath = require(`../assets/logos/${slug}.svg`);
-        console.log(`Loaded logo for ${teamName}:`, logoPath);
+        console.log(`Loaded SVG logo for ${teamName}:`, logoPath);
         return logoPath;
-      } catch (requireError) {
-        console.log(`No logo found for ${teamName}, using fallback`);
-        return '';
+      } catch (svgError) {
+        try {
+          const logoPath = require(`../assets/logos/${slug}.jpg`);
+          console.log(`Loaded JPG logo for ${teamName}:`, logoPath);
+          return logoPath;
+        } catch (jpgError) {
+          console.log(`No logo found for ${teamName} (tried .svg and .jpg), using fallback`);
+          return '';
+        }
       }
     } catch (error) {
       console.error('Error generating logo path:', error);
