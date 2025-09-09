@@ -67,6 +67,31 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
     }
   };
 
+  // Generate image filename from player name and rank
+  const getPlayerImagePath = (playerName: string, rank: number): string => {
+    try {
+      const slug = playerName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .trim();
+      const rankPadded = rank.toString().padStart(2, '0'); // 01, 02, etc.
+      
+      // Import the image directly from src/assets
+      try {
+        const imagePath = require(`../assets/players/${rankPadded}-${slug}.jpg`);
+        console.log(`Loaded image for ${playerName} (rank ${rank}):`, imagePath);
+        return imagePath;
+      } catch (requireError) {
+        console.log(`No image found for ${playerName}, using fallback`);
+        return '';
+      }
+    } catch (error) {
+      console.error('Error generating image path:', error);
+      return '';
+    }
+  };
+
   // Format-specific styling
   const getLayoutStyles = () => {
     switch (format) {
@@ -104,6 +129,17 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
   };
 
   const styles = getLayoutStyles();
+  
+  // Generate the image path
+  const imagePath = getPlayerImagePath(safeRecord.player, safeRecord.rank);
+  
+  // Debug logging
+  console.log(`PlayerCard for ${safeRecord.player} (rank ${safeRecord.rank}):`, {
+    playerImage: safeRecord.playerImage,
+    imageError,
+    generatedPath: imagePath,
+    willShowImage: safeRecord.playerImage || !imageError
+  });
 
   try {
     return (
@@ -145,10 +181,26 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
           }}
         >
-          <PlayerImageFallback
-            initials={getPlayerInitials(safeRecord.player)}
-            colors={safeRecord.teamColors}
-          />
+          {safeRecord.playerImage || !imageError ? (
+            <img
+              src={safeRecord.playerImage || imagePath}
+              alt={safeRecord.player}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              onError={(e) => {
+                console.error(`Failed to load image for ${safeRecord.player} (rank ${safeRecord.rank}):`, e.currentTarget.src);
+                setImageError(true);
+              }}
+            />
+          ) : (
+            <PlayerImageFallback
+              initials={getPlayerInitials(safeRecord.player)}
+              colors={safeRecord.teamColors}
+            />
+          )}
         </div>
 
         {/* Text Content */}
