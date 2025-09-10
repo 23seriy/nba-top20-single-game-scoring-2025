@@ -18,9 +18,9 @@ export const videoDurations: { [rank: number]: number } = {
   10: 58,
   11: 53,
   12: 52,
-  13: 53,
+  13: 54,
   14: 50,
-  15: 52, 
+  15: 53.5,
 };
 
 // Helper function to get video duration in frames

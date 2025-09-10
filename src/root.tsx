@@ -9,6 +9,7 @@ import {
 } from './components';
 import scoringData from '../data/top20_single_game_scoring.json';
 import { ScoringRecord } from './types';
+import { compositionDurations } from './utils/calculateTotalDuration';
 
 // Validate and sanitize data
 const validateScoringData = (data: any[]): ScoringRecord[] => {
@@ -41,7 +42,7 @@ export const RemotionRoot = () => {
       <Composition
         id="NBATop15Scoring-YouTube"
         component={NBATop15ScoringYouTube}
-        durationInFrames={3600}
+        durationInFrames={compositionDurations.youtube}
         fps={30}
         width={1920}
         height={1080}
@@ -51,7 +52,7 @@ export const RemotionRoot = () => {
       <Composition
         id="NBATop15Scoring-ShortsPart1"
         component={NBATop15ScoringShortsPart1}
-        durationInFrames={1800}
+        durationInFrames={compositionDurations.shortsPart1}
         fps={30}
         width={1080}
         height={1920}
@@ -61,7 +62,7 @@ export const RemotionRoot = () => {
       <Composition
         id="NBATop15Scoring-ShortsPart2"
         component={NBATop15ScoringShortsPart2}
-        durationInFrames={1800}
+        durationInFrames={compositionDurations.shortsPart2}
         fps={30}
         width={1080}
         height={1920}
@@ -71,7 +72,7 @@ export const RemotionRoot = () => {
       <Composition
         id="NBATop15Scoring-Square"
         component={NBATop15ScoringSquare}
-        durationInFrames={2400}
+        durationInFrames={compositionDurations.square}
         fps={30}
         width={1080}
         height={1080}
