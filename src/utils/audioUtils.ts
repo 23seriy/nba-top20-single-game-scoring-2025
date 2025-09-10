@@ -36,29 +36,44 @@ export const getAudioDurationInFrames = (playerName: string, rank: number, fps: 
       }
 
       // Create audio element to get duration
-      const audio = new Audio(audioPath);
+      const audio = new Audio();
       
-      audio.addEventListener('loadedmetadata', () => {
+      const cleanup = () => {
+        audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+        audio.removeEventListener('error', onError);
+        audio.src = '';
+      };
+
+      const onLoadedMetadata = () => {
         const durationInSeconds = audio.duration;
         const durationInFrames = Math.ceil(durationInSeconds * fps);
         
         console.log(`Audio duration for ${playerName} (rank ${rank}): ${durationInSeconds}s = ${durationInFrames} frames`);
+        cleanup();
         resolve(durationInFrames);
-      });
+      };
 
-      audio.addEventListener('error', (error) => {
-        console.error(`Error loading audio for ${playerName} (rank ${rank}):`, error);
+      const onError = () => {
+        console.log(`Audio file not found for ${playerName} (rank ${rank}), using default duration`);
+        cleanup();
         resolve(1800); // Default 1 minute fallback
-      });
+      };
+
+      audio.addEventListener('loadedmetadata', onLoadedMetadata);
+      audio.addEventListener('error', onError);
 
       // Set a timeout fallback
       setTimeout(() => {
-        console.warn(`Timeout getting audio duration for ${playerName} (rank ${rank}), using default`);
+        console.log(`Timeout getting audio duration for ${playerName} (rank ${rank}), using default`);
+        cleanup();
         resolve(1800);
-      }, 5000);
+      }, 3000); // Reduced timeout to 3 seconds
+
+      // Set the source last to trigger loading
+      audio.src = audioPath;
 
     } catch (error) {
-      console.error(`Error getting audio duration for ${playerName} (rank ${rank}):`, error);
+      console.log(`Error getting audio duration for ${playerName} (rank ${rank}), using default`);
       resolve(1800); // Default 1 minute fallback
     }
   });

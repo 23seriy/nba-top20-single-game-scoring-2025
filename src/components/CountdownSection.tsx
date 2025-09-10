@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Sequence, useVideoConfig } from 'remotion';
 import { ScoringRecord } from '../types';
 import { PlayerCard } from './PlayerCard';
 import { VideoFootage } from './VideoFootage';
-import { getAudioDurationInFrames } from '../utils/audioUtils';
+import { getVideoDurationInFrames } from '../config/videoDurations';
 
 interface CountdownSectionProps {
   records: ScoringRecord[];
@@ -19,37 +19,11 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   endRank 
 }) => {
   const { fps } = useVideoConfig();
-  const [audioDurations, setAudioDurations] = useState<{ [rank: number]: number }>({});
   
   // Filter records for this section
   const sectionRecords = records.filter(record => 
     record.rank >= endRank && record.rank <= startRank
   ).sort((a, b) => b.rank - a.rank); // Sort descending (20 -> 1)
-
-  // Load audio durations for all players on component mount
-  useEffect(() => {
-    const loadAudioDurations = async () => {
-      for (const record of sectionRecords) {
-        try {
-          const duration = await getAudioDurationInFrames(record.player, record.rank, fps);
-          setAudioDurations(prev => ({
-            ...prev,
-            [record.rank]: duration
-          }));
-          console.log(`Loaded audio duration for rank ${record.rank}: ${duration} frames`);
-        } catch (error) {
-          console.error(`Failed to load audio duration for rank ${record.rank}:`, error);
-          // Set fallback duration if audio loading fails
-          setAudioDurations(prev => ({
-            ...prev,
-            [record.rank]: 1800 // 1 minute fallback
-          }));
-        }
-      }
-    };
-
-    loadAudioDurations();
-  }, [sectionRecords, fps]);
 
   // Duration per player (in frames) - split between player card and video
   const getPlayerCardDuration = (rank: number): number => {
@@ -57,14 +31,8 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   };
 
   const getVideoDuration = (rank: number): number => {
-    // Use detected audio duration for all players
-    const detectedDuration = audioDurations[rank];
-    if (detectedDuration) {
-      console.log(`Using detected audio duration for rank ${rank}: ${detectedDuration} frames`);
-      return detectedDuration;
-    }
-    // Fallback while audio is loading
-    return 1800; // Default fallback (1 minute at 30fps)
+    // Use manual video duration configuration (default 50 seconds = 1500 frames)
+    return getVideoDurationInFrames(rank, fps);
   };
 
   try {
