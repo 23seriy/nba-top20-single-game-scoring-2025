@@ -6,6 +6,7 @@ This folder contains audio narration files for each NBA player in the Top 15 sin
 - **Format**: MP3 audio files
 - **Naming Convention**: `[rank]-[player_name].mp3` (e.g., `01-wilt_chamberlain.mp3`)
 - **Duration**: Approximately 1 minute of narration per player
+- **Special Case**: Rank 15 (`15-wilt_chamberlain.mp3`) - Video duration will automatically match audio length
 - **Quality**: Recommended 128kbps or higher for clear voice narration
 
 ## Expected Filenames
@@ -42,6 +43,7 @@ Each 1-minute narration should cover:
 - If an audio file is missing, the video will play without narration
 - Audio should be clear, professional quality suitable for sports content
 - Multiple audio files for the same player (like Wilt Chamberlain) tell different stories for each performance
+- **Dynamic Duration**: For rank 15 (Wilt Chamberlain 70 points), the video will automatically adjust to match the exact length of the audio file
 
 ## File Organization
 ```

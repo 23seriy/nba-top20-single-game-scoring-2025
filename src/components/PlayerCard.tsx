@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
+import React, { useState } from 'react';
+import { AbsoluteFill, useVideoConfig, staticFile, Img, useCurrentFrame, interpolate } from 'remotion';
+import { Watermark } from './Watermark';
 import { ScoringRecord } from '../types';
 
 interface PlayerCardProps {
@@ -434,6 +435,9 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             </div>
           </div>
         )}
+
+        {/* Channel Watermark */}
+        <Watermark />
       </div>
     );
   } catch (error) {

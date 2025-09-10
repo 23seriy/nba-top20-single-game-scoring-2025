@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate, Video, Audio } from 'remotion';
+import { AbsoluteFill, useVideoConfig, staticFile, Video, Audio, useCurrentFrame, interpolate } from 'remotion';
+import { Watermark } from './Watermark';
 import { ScoringRecord } from '../types';
 
 interface VideoFootageProps {
@@ -9,7 +10,7 @@ interface VideoFootageProps {
 
 export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, durationInFrames } = useVideoConfig();
   const [videoError, setVideoError] = useState(false);
   const [audioError, setAudioError] = useState(false);
 
@@ -246,6 +247,7 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
             <Audio
               src={audioPath}
               volume={0.8}
+              {...(safeRecord.rank === 15 ? { endAt: Infinity } : {})} // For rank 15, let audio determine duration
               onError={() => {
                 console.error(`Failed to load audio for ${safeRecord.player} (rank ${safeRecord.rank})`);
                 setAudioError(true);
@@ -325,6 +327,9 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
           >
             #{safeRecord.rank}
           </div>
+
+          {/* Channel Watermark */}
+          <Watermark />
         </div>
       </div>
     );
