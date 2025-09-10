@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate, Video } from 'remotion';
+import { useCurrentFrame, useVideoConfig, interpolate, Video, Audio } from 'remotion';
 import { ScoringRecord } from '../types';
 
 interface VideoFootageProps {
@@ -11,6 +11,7 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const [videoError, setVideoError] = useState(false);
+  const [audioError, setAudioError] = useState(false);
 
   // Validate record data to prevent NaN values
   const safeRecord = {
@@ -28,6 +29,32 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
   const safeFrame = Number(frame) || 0;
   const videoEnter = interpolate(safeFrame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
   const overlayReveal = interpolate(safeFrame, [15, 45], [0, 1], { extrapolateRight: 'clamp' });
+
+  // Generate audio filename using rank-based naming convention
+  const getAudioPath = (playerName: string, rank: number): string => {
+    try {
+      const slug = playerName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+        .replace(/\s+/g, '_') // Replace spaces with underscores
+        .trim();
+      
+      const rankPadded = rank.toString().padStart(2, '0'); // 01, 02, etc.
+      
+      // Import the audio directly from src/assets using rank-based naming
+      try {
+        const audioPath = require(`../assets/players/audio/${rankPadded}-${slug}.mp3`);
+        console.log(`Loaded audio for ${playerName} (rank ${rank}):`, audioPath);
+        return audioPath;
+      } catch (requireError) {
+        console.log(`No audio found for ${playerName} at rank ${rank}, continuing without narration`);
+        return '';
+      }
+    } catch (error) {
+      console.error('Error generating audio path:', error);
+      return '';
+    }
+  };
 
   // Generate video filename using rank-based naming convention
   const getVideoPath = (playerName: string, rank: number): string => {
@@ -174,12 +201,16 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
 
   const styles = getLayoutStyles();
   const videoPath = getVideoPath(safeRecord.player, safeRecord.rank);
+  const audioPath = getAudioPath(safeRecord.player, safeRecord.rank);
 
   // Debug logging
   console.log(`VideoFootage for ${safeRecord.player} (rank ${safeRecord.rank}):`, {
     videoError,
-    generatedPath: videoPath,
-    willShowVideo: videoPath && !videoError
+    audioError,
+    generatedVideoPath: videoPath,
+    generatedAudioPath: audioPath,
+    willShowVideo: videoPath && !videoError,
+    willPlayAudio: audioPath && !audioError
   });
 
   try {
@@ -210,6 +241,18 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
             boxShadow: 'none', // Remove shadow for fullscreen
           }}
         >
+          {/* Audio Narration */}
+          {audioPath && !audioError && (
+            <Audio
+              src={audioPath}
+              volume={0.8}
+              onError={() => {
+                console.error(`Failed to load audio for ${safeRecord.player} (rank ${safeRecord.rank})`);
+                setAudioError(true);
+              }}
+            />
+          )}
+
           {videoPath && !videoError ? (
             <Video
               src={videoPath}

@@ -32,7 +32,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   };
 
   const getVideoDuration = (rank: number): number => {
-    return 90; // 3 seconds for all videos (90 frames at 30fps)
+    return 1800; // 1 minute for all videos with narration (1800 frames at 30fps)
   };
 
   try {
