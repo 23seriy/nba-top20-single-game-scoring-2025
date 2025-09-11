@@ -2,8 +2,6 @@ import React from 'react';
 import { Composition } from 'remotion';
 import {
   NBATop15ScoringYouTube,
-  NBATop15ScoringShortsPart1,
-  NBATop15ScoringShortsPart2,
   NBATop15ScoringSquare,
   NBATop15ScoringThumbnail
 } from './components';
@@ -49,25 +47,6 @@ export const RemotionRoot = () => {
         defaultProps={{ records: validatedData }}
       />
       
-      <Composition
-        id="NBATop15Scoring-ShortsPart1"
-        component={NBATop15ScoringShortsPart1}
-        durationInFrames={compositionDurations.shortsPart1}
-        fps={30}
-        width={1080}
-        height={1920}
-        defaultProps={{ records: validatedData }}
-      />
-      
-      <Composition
-        id="NBATop15Scoring-ShortsPart2"
-        component={NBATop15ScoringShortsPart2}
-        durationInFrames={compositionDurations.shortsPart2}
-        fps={30}
-        width={1080}
-        height={1920}
-        defaultProps={{ records: validatedData }}
-      />
       
       <Composition
         id="NBATop15Scoring-Square"
@@ -91,24 +70,15 @@ export const RemotionRoot = () => {
       />
       
       <Composition
-        id="NBATop15Scoring-ShortsThumbnail"
+        id="NBATop15Scoring-InstagramThumbnail"
         component={NBATop15ScoringThumbnail}
         durationInFrames={1}
         fps={30}
-        width={1280}
-        height={720}
-        defaultProps={{ records: validatedData, format: 'shorts' }}
-      />
-      
-      <Composition
-        id="NBATop15Scoring-SquareThumbnail"
-        component={NBATop15ScoringThumbnail}
-        durationInFrames={1}
-        fps={30}
-        width={1280}
-        height={720}
+        width={1080}
+        height={1080}
         defaultProps={{ records: validatedData, format: 'square' }}
       />
+      
     </>
   );
 };
