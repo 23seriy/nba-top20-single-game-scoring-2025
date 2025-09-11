@@ -27,7 +27,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
 
   // Duration per player (in frames) - split between player card and video
   const getPlayerCardDuration = (rank: number): number => {
-    return 120; // 4 seconds for all player cards (120 frames at 30fps)
+    return 150; // 5 seconds for all player cards (150 frames at 30fps)
   };
 
   const getVideoDuration = (rank: number): number => {

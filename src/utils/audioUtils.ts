@@ -24,6 +24,25 @@ export const getAudioPath = (playerName: string, rank: number): string => {
   }
 };
 
+// Generate card number audio filename
+export const getCardNumberAudioPath = (rank: number): string => {
+  try {
+    const rankPadded = rank.toString().padStart(2, '0'); // 01, 02, etc.
+    
+    try {
+      const audioPath = require(`../assets/players/card_numbers/${rankPadded}.mp3`);
+      console.log(`Found card number audio for rank ${rank}:`, audioPath);
+      return audioPath;
+    } catch (requireError) {
+      console.log(`No card number audio found for rank ${rank}`);
+      return '';
+    }
+  } catch (error) {
+    console.error('Error generating card number audio path:', error);
+    return '';
+  }
+};
+
 // Get audio duration in frames for a specific player using browser Audio API
 export const getAudioDurationInFrames = (playerName: string, rank: number, fps: number): Promise<number> => {
   return new Promise((resolve) => {

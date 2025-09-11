@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { AbsoluteFill, useVideoConfig, staticFile, Img, useCurrentFrame, interpolate } from 'remotion';
+import { AbsoluteFill, useVideoConfig, staticFile, Img, useCurrentFrame, interpolate, Audio } from 'remotion';
 import { Watermark } from './Watermark';
 import { ScoringRecord } from '../types';
+import { getCardNumberAudioPath } from '../utils/audioUtils';
 
 interface PlayerCardProps {
   record: ScoringRecord;
@@ -31,6 +32,12 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
       secondary: String(record.teamColors?.secondary || '#FFC72C')
     }
   };
+
+  // Get card number audio
+  const cardNumberAudio = getCardNumberAudioPath(safeRecord.rank);
+  
+  // Debug audio path
+  console.log(`Card number audio for rank ${safeRecord.rank}:`, cardNumberAudio);
 
   // Animation timing with safe frame values
   const safeFrame = Number(frame) || 0;
@@ -240,20 +247,31 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
 
   try {
     return (
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
-          display: 'flex',
-          ...styles.container,
-          opacity: cardEnter,
-          transform: `scale(${0.8 + cardEnter * 0.2})`,
-        }}
-      >
+      <AbsoluteFill>
+        {/* Card Number Audio - Play immediately when card appears */}
+        {cardNumberAudio && (
+          <Audio
+            src={cardNumberAudio}
+            startFrom={0} // Start immediately when PlayerCard sequence begins
+            endAt={60} // Play for 2 seconds (60 frames at 30fps)
+            volume={1.0}
+          />
+        )}
+        
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
+            display: 'flex',
+            ...styles.container,
+            opacity: cardEnter,
+            transform: `scale(${0.8 + cardEnter * 0.2})`,
+          }}
+        >
         {/* Team Logo - Top Left Corner */}
         <div
           style={{
@@ -436,28 +454,41 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           </div>
         )}
       </div>
+      </AbsoluteFill>
     );
   } catch (error) {
-    console.error('Error rendering PlayerCard:', error);
+    console.error('Error in PlayerCard:', error);
     return (
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '48px',
-          textAlign: 'center',
-        }}
-      >
-        Error loading player #{safeRecord.rank}
-      </div>
+      <AbsoluteFill>
+        {/* Card Number Audio - Play immediately when card appears */}
+        {cardNumberAudio && (
+          <Audio
+            src={cardNumberAudio}
+            startFrom={0} // Start immediately when PlayerCard sequence begins
+            endAt={60} // Play for 2 seconds (60 frames at 30fps)
+            volume={1.0}
+          />
+        )}
+        
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '48px',
+            textAlign: 'center',
+          }}
+        >
+          Error loading player #{safeRecord.rank}
+        </div>
+      </AbsoluteFill>
     );
   }
 };

@@ -1,8 +1,11 @@
-node_modules
-dist
-.DS_Store
+node_modules/
+dist/
+out/
 .env
+.env.local
+.DS_Store
+*.log
+# **/README.md
 package-lock.json
 # Ignore the output video from Git but not videos you import into src/.
-out
 renders

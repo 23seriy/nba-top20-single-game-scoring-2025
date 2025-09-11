@@ -7,3 +7,4 @@ export { PlayerCard } from './PlayerCard';
 export { VideoFootage } from './VideoFootage';
 export { CountdownSection } from './CountdownSection';
 export { Watermark } from './Watermark';
+export { EndScreen } from './EndScreen';

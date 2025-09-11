@@ -23,116 +23,193 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
     }
   };
   
+  // Get other player images for overlay
+  const getPlayerImage = (imageName: string): string => {
+    try {
+      return require(`../assets/players/thumbnail_images/${imageName}`);
+    } catch (error) {
+      console.log(`Player image not found: ${imageName}`);
+      return '';
+    }
+  };
+  
   const wiltBackgroundImage = getWiltBackgroundImage();
+  const kobeImage = getPlayerImage('kobe_bryant.jpg');
+  const lukaDoncicImage = getPlayerImage('luka_doncic.jpg');
+  const joelEmbiidImage = getPlayerImage('joel_embiid.jpg');
   
   return (
     <div style={{
       width: '100%',
       height: '100%',
-      display: 'flex',
-      flexDirection: 'row',
       position: 'relative',
       fontFamily: 'Arial Black, Arial, sans-serif',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
+      backgroundColor: '#C8102E',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
     }}>
-      {/* Left Side - Wilt Chamberlain Background */}
+      {/* Dark overlay for better text readability */}
       <div style={{
-        width: '67%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
         height: '100%',
-        position: 'relative',
-        backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
-        backgroundColor: wiltBackgroundImage ? 'transparent' : (format === 'youtube' ? '#2d2d2d' : '#FF6B35'),
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        background: 'linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6))',
+        zIndex: 1
+      }} />
+      
+      {/* Bottom Left Player Images */}
+      <div style={{
+        position: 'absolute',
+        bottom: '30px',
+        left: '30px',
+        display: 'flex',
+        gap: '15px',
+        zIndex: 2
       }}>
-        {/* Dark overlay for better text readability */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(to right, rgba(0,0,0,0.3), rgba(0,0,0,0.7))',
-          zIndex: 1
-        }} />
+        {/* Kobe Bryant Image */}
+        {kobeImage && (
+          <div style={{
+            width: '240px',
+            height: '240px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
+            position: 'relative'
+          }}>
+            <img 
+              src={kobeImage} 
+              alt="Kobe Bryant"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: '-5px',
+              right: '-5px',
+              backgroundColor: '#552583',
+              color: 'white',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              border: '2px solid white'
+            }}>
+              #2
+            </div>
+          </div>
+        )}
         
-        {/* Wilt's Achievement Badge */}
-        <div style={{
-          position: 'absolute',
-          top: '30px',
-          left: '30px',
-          backgroundColor: '#FFD700',
-          color: '#1a1a1a',
-          padding: '15px 25px',
-          borderRadius: '15px',
-          fontSize: '24px',
-          fontWeight: '900',
-          textTransform: 'uppercase',
-          letterSpacing: '1px',
-          boxShadow: '0 8px 25px rgba(255, 215, 0, 0.4)',
-          zIndex: 2
-        }}>
-          #1 • 100 PTS
-        </div>
+        {/* Luka Dončić Image */}
+        {lukaDoncicImage && (
+          <div style={{
+            width: '240px',
+            height: '240px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
+            position: 'relative'
+          }}>
+            <img 
+              src={lukaDoncicImage} 
+              alt="Luka Dončić"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: '-5px',
+              right: '-5px',
+              backgroundColor: '#00538C',
+              color: 'white',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              border: '2px solid white'
+            }}>
+              #4
+            </div>
+          </div>
+        )}
         
-        {/* Wilt's Name */}
-        <div style={{
-          position: 'absolute',
-          bottom: '30px',
-          left: '30px',
-          color: 'white',
-          fontSize: '36px',
-          fontWeight: '900',
-          textShadow: '0 0 20px rgba(0,0,0,0.8), 2px 2px 8px rgba(0,0,0,0.9)',
-          textTransform: 'uppercase',
-          letterSpacing: '2px',
-          zIndex: 2
-        }}>
-          WILT<br/>CHAMBERLAIN
-        </div>
+        {/* Joel Embiid Image */}
+        {joelEmbiidImage && (
+          <div style={{
+            width: '240px',
+            height: '240px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
+            position: 'relative'
+          }}>
+            <img 
+              src={joelEmbiidImage} 
+              alt="Joel Embiid"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: '-5px',
+              right: '-5px',
+              backgroundColor: '#006BB6',
+              color: 'white',
+              borderRadius: '50%',
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              border: '2px solid white'
+            }}>
+              #7
+            </div>
+          </div>
+        )}
       </div>
       
-      {/* Right Side - Content */}
+      {/* Content Overlay */}
       <div style={{
-        width: '33%',
-        height: '100%',
+        position: 'absolute',
+        top: '-30px',
+        right: 0,
+        width: '50%',
+        height: 'calc(100% - 30px)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '30px 20px',
-        position: 'relative',
-        background: format === 'youtube' 
-          ? 'linear-gradient(135deg, #1a1a1a, #2d2d2d)'
-          : 'linear-gradient(135deg, #F7931E, #FFD23F)'
+        justifyContent: 'flex-start',
+        padding: '20px 30px',
+        zIndex: 2
       }}>
-        {/* Background Elements */}
-        <div style={{
-          position: 'absolute',
-          top: '-20px',
-          right: '-20px',
-          width: '200px',
-          height: '200px',
-          borderRadius: '50%',
-          background: 'rgba(255, 107, 53, 0.1)',
-          filter: 'blur(40px)'
-        }} />
-        
-        <div style={{
-          position: 'absolute',
-          bottom: '-30px',
-          right: '-30px',
-          width: '150px',
-          height: '150px',
-          borderRadius: '50%',
-          background: 'rgba(255, 210, 63, 0.1)',
-          filter: 'blur(30px)'
-        }} />
 
         {/* Main Title */}
         <div style={{
-          fontSize: format === 'youtube' ? '72px' : '56px',
+          fontSize: format === 'youtube' ? '90px' : '74px',
           fontWeight: '900',
           color: format === 'youtube' ? '#FF6B35' : 'white',
           textShadow: format === 'youtube' 
@@ -148,7 +225,7 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
       
         {/* Subtitle */}
         <div style={{
-          fontSize: format === 'youtube' ? '36px' : '30px',
+          fontSize: format === 'youtube' ? '56px' : '50px',
           fontWeight: 'bold',
           color: format === 'youtube' ? '#FFD700' : 'white',
           textShadow: format === 'youtube'
@@ -166,7 +243,7 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
       
         {/* Call to Action */}
         <div style={{
-          fontSize: format === 'youtube' ? '24px' : '20px',
+          fontSize: format === 'youtube' ? '34px' : '30px',
           color: format === 'youtube' ? '#FF6B35' : 'white',
           textShadow: format === 'youtube'
             ? '0 0 15px rgba(255, 107, 53, 0.5), 2px 2px 4px rgba(0,0,0,0.8)'
