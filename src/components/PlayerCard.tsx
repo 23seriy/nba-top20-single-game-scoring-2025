@@ -435,9 +435,6 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             </div>
           </div>
         )}
-
-        {/* Channel Watermark */}
-        <Watermark />
       </div>
     );
   } catch (error) {
