@@ -12,6 +12,40 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
 }) => {
   // Get top 5 players for thumbnail
   const topPlayers = records.slice(0, 5);
+
+  // Dynamic text color system for thumbnails
+  const getThumbnailTextColors = () => {
+    return {
+      // Main title - vibrant with enhanced glow
+      mainTitle: {
+        color: format === 'youtube' ? '#FFFFFF' : '#FFFFFF',
+        shadow: format === 'youtube' 
+          ? `0 0 30px rgba(255, 107, 53, 0.8), 0 0 60px rgba(255, 107, 53, 0.4), 4px 4px 12px rgba(0,0,0,0.9)`
+          : `0 0 25px rgba(255, 255, 255, 0.6), 4px 4px 12px rgba(0,0,0,0.9)`,
+        stroke: format === 'youtube' ? '#FF6B35' : '#C8102E'
+      },
+      
+      // Subtitle - golden accent with depth
+      subtitle: {
+        color: format === 'youtube' ? '#FFD700' : '#FFD700',
+        shadow: format === 'youtube'
+          ? `0 0 25px rgba(255, 215, 0, 0.7), 0 0 50px rgba(255, 215, 0, 0.3), 3px 3px 8px rgba(0,0,0,0.8)`
+          : `0 0 20px rgba(255, 215, 0, 0.6), 3px 3px 8px rgba(0,0,0,0.8)`,
+        stroke: '#B8860B'
+      },
+      
+      // Call to action - energetic with pulse effect
+      cta: {
+        color: format === 'youtube' ? '#FF6B35' : '#FFFFFF',
+        shadow: format === 'youtube'
+          ? `0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4), 2px 2px 6px rgba(0,0,0,0.8)`
+          : `0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(0,0,0,0.8)`,
+        stroke: format === 'youtube' ? '#CC5429' : '#C8102E'
+      }
+    };
+  };
+
+  const textColors = getThumbnailTextColors();
   
   // Get Wilt Chamberlain background image
   const getWiltBackgroundImage = (): string => {
@@ -51,6 +85,15 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat'
     }}>
+      {/* CSS Animation Keyframes */}
+      <style>
+        {`
+          @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.05); opacity: 1; }
+          }
+        `}
+      </style>
       {/* Dark overlay for better text readability */}
       <div style={{
         position: 'absolute',
@@ -211,14 +254,18 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
         <div style={{
           fontSize: format === 'youtube' ? '90px' : '74px',
           fontWeight: '900',
-          color: format === 'youtube' ? '#FF6B35' : 'white',
-          textShadow: format === 'youtube' 
-            ? '0 0 20px rgba(255, 107, 53, 0.5), 4px 4px 8px rgba(0,0,0,0.8)'
-            : '4px 4px 8px rgba(0,0,0,0.8)',
+          color: textColors.mainTitle.color,
+          textShadow: textColors.mainTitle.shadow,
+          WebkitTextStroke: `2px ${textColors.mainTitle.stroke}`,
           marginBottom: '15px',
           textAlign: 'center',
           letterSpacing: '-2px',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
+          filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.5))',
+          background: `linear-gradient(45deg, ${textColors.mainTitle.color}, rgba(255,255,255,0.8))`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
         }}>
           NBA TOP 15
         </div>
@@ -227,14 +274,18 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
         <div style={{
           fontSize: format === 'youtube' ? '56px' : '50px',
           fontWeight: 'bold',
-          color: format === 'youtube' ? '#FFD700' : 'white',
-          textShadow: format === 'youtube'
-            ? '0 0 15px rgba(255, 215, 0, 0.5), 2px 2px 4px rgba(0,0,0,0.8)'
-            : '2px 2px 4px rgba(0,0,0,0.8)',
+          color: textColors.subtitle.color,
+          textShadow: textColors.subtitle.shadow,
+          WebkitTextStroke: `1px ${textColors.subtitle.stroke}`,
           marginBottom: format === 'youtube' ? '20px' : '25px',
           textAlign: 'center',
           letterSpacing: '1px',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
+          filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.4))',
+          background: `linear-gradient(45deg, ${textColors.subtitle.color}, rgba(255,215,0,0.7))`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
         }}>
           SINGLE GAME SCORING
         </div>
@@ -244,14 +295,19 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
         {/* Call to Action */}
         <div style={{
           fontSize: format === 'youtube' ? '34px' : '30px',
-          color: format === 'youtube' ? '#FF6B35' : 'white',
-          textShadow: format === 'youtube'
-            ? '0 0 15px rgba(255, 107, 53, 0.5), 2px 2px 4px rgba(0,0,0,0.8)'
-            : '2px 2px 4px rgba(0,0,0,0.8)',
+          color: textColors.cta.color,
+          textShadow: textColors.cta.shadow,
+          WebkitTextStroke: `1px ${textColors.cta.stroke}`,
           fontWeight: '900',
           textAlign: 'center',
           textTransform: 'uppercase',
-          letterSpacing: '1px'
+          letterSpacing: '1px',
+          filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.4))',
+          background: `linear-gradient(45deg, ${textColors.cta.color}, rgba(255,107,53,0.8))`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          animation: format === 'youtube' ? 'pulse 2s ease-in-out infinite alternate' : 'none'
         }}>
           {'WATCH THE COUNTDOWN! 🏀'}
         </div>

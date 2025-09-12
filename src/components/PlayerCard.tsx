@@ -33,17 +33,78 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
     }
   };
 
+  // Dynamic text color system based on team colors
+  const getTextColors = () => {
+    const primaryRgb = {
+      r: parseInt(safeRecord.teamColors.primary.slice(1, 3), 16),
+      g: parseInt(safeRecord.teamColors.primary.slice(3, 5), 16),
+      b: parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)
+    };
+    
+    const secondaryRgb = {
+      r: parseInt(safeRecord.teamColors.secondary.slice(1, 3), 16),
+      g: parseInt(safeRecord.teamColors.secondary.slice(3, 5), 16),
+      b: parseInt(safeRecord.teamColors.secondary.slice(5, 7), 16)
+    };
+
+    // Calculate luminance for better contrast decisions
+    const getLuminance = (rgb: {r: number, g: number, b: number}) => {
+      const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(c => {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+
+    const primaryLum = getLuminance(primaryRgb);
+    const secondaryLum = getLuminance(secondaryRgb);
+
+    return {
+      // Rank number - bright white with team color glow
+      rankText: '#FFFFFF',
+      rankGlow: `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)`,
+      
+      // Player name - warm white with subtle team tint
+      playerName: `rgba(${255 - primaryRgb.r * 0.1}, ${255 - primaryRgb.g * 0.1}, ${255 - primaryRgb.b * 0.1}, 0.98)`,
+      
+      // Points - dynamic based on team colors
+      pointsText: primaryLum > 0.5 ? '#FFFFFF' : `rgba(${Math.min(255, primaryRgb.r + 100)}, ${Math.min(255, primaryRgb.g + 100)}, ${Math.min(255, primaryRgb.b + 100)}, 0.95)`,
+      pointsGlow: `rgba(${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}, 0.6)`,
+      
+      // Details - soft white with team accent
+      detailsText: 'rgba(255, 255, 255, 0.92)',
+      detailsAccent: `rgba(${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}, 0.85)`,
+      
+      // Context - team secondary color with enhanced visibility
+      contextText: secondaryLum > 0.3 ? 
+        `rgba(${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}, 0.9)` : 
+        `rgba(${Math.min(255, secondaryRgb.r + 80)}, ${Math.min(255, secondaryRgb.g + 80)}, ${Math.min(255, secondaryRgb.b + 80)}, 0.9)`
+    };
+  };
+
+  const textColors = getTextColors();
+
   // Get card number audio
   const cardNumberAudio = getCardNumberAudioPath(safeRecord.rank);
   
   // Debug audio path
   console.log(`Card number audio for rank ${safeRecord.rank}:`, cardNumberAudio);
 
-  // Animation timing with safe frame values
+  // Animation timing with safe frame values and smooth easing
   const safeFrame = Number(frame) || 0;
-  const cardEnter = interpolate(safeFrame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
-  const textReveal = interpolate(safeFrame, [15, 45], [0, 1], { extrapolateRight: 'clamp' });
-  const pointsReveal = interpolate(safeFrame, [30, 60], [0, 1], { extrapolateRight: 'clamp' });
+  const cardEnter = interpolate(safeFrame, [0, 45], [0, 1], { 
+    extrapolateRight: 'clamp',
+    easing: (t) => 1 - Math.pow(1 - t, 3) // ease-out cubic
+  });
+  const textReveal = interpolate(safeFrame, [20, 60], [0, 1], { 
+    extrapolateRight: 'clamp',
+    easing: (t) => t * t * (3 - 2 * t) // smooth step
+  });
+  const pointsReveal = interpolate(safeFrame, [40, 80], [0, 1], { 
+    extrapolateRight: 'clamp',
+    easing: (t) => 1 - Math.pow(1 - t, 4) // ease-out quart
+  });
+  const floatAnimation = Math.sin(safeFrame * 0.05) * 2; // Subtle floating effect
 
   // Local fallback component for player images
   const PlayerImageFallback = ({ initials, colors }: { initials: string; colors: { primary: string; secondary: string } }) => (
@@ -265,11 +326,22 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
+            background: `linear-gradient(135deg, 
+              rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.15),
+              rgba(${parseInt(safeRecord.teamColors.secondary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(5, 7), 16)}, 0.1),
+              rgba(26, 26, 46, 0.95)
+            )`,
+            backdropFilter: 'blur(10px)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: `
+              0 20px 40px rgba(0,0,0,0.4),
+              inset 0 1px 0 rgba(255,255,255,0.1)
+            `,
             display: 'flex',
             ...styles.container,
             opacity: cardEnter,
-            transform: `scale(${0.8 + cardEnter * 0.2})`,
+            transform: `translateY(${20 - cardEnter * 20 + floatAnimation}px) scale(${0.95 + cardEnter * 0.05})`,
           }}
         >
         {/* Team Logo - Top Left Corner */}
@@ -310,17 +382,37 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             />
           )}
         </div>
-        {/* Rank Number */}
+        {/* Rank Number - Top Right with Glass Card */}
         <div
           style={{
-            ...styles.rank,
-            color: safeRecord.teamColors.secondary,
-            fontWeight: 'bold',
-            textShadow: '3px 3px 6px rgba(0,0,0,0.7)',
+            position: 'absolute',
+            top: format === 'youtube' ? '30px' : '30px',
+            right: format === 'youtube' ? '30px' : '30px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            padding: format === 'youtube' ? '20px 30px' : '15px 20px',
             opacity: textReveal,
+            transform: `translateY(${30 - textReveal * 30}px) scale(${0.8 + textReveal * 0.2})`,
           }}
         >
-          #{safeRecord.rank}
+          <div
+            style={{
+              fontSize: format === 'youtube' ? '72px' : format === 'shorts' ? '64px' : '48px',
+              fontWeight: '200',
+              color: textColors.rankText,
+              textShadow: `
+                0 0 20px ${textColors.rankGlow},
+                0 2px 4px rgba(0,0,0,0.8),
+                0 0 40px ${textColors.rankGlow}
+              `,
+              lineHeight: '1',
+              letterSpacing: '-2px',
+            }}
+          >
+            #{safeRecord.rank}
+          </div>
         </div>
 
         {/* Player Image Container */}
@@ -330,8 +422,11 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             position: 'relative',
             borderRadius: '50%',
             overflow: 'hidden',
-            border: `6px solid ${safeRecord.teamColors.primary}`,
-            boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+            border: `4px solid rgba(255, 255, 255, 0.3)`,
+            boxShadow: `
+              0 8px 32px rgba(0,0,0,0.3),
+              0 0 0 2px rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.4)
+            `,
           }}
         >
           {safeRecord.playerImage || !imageError ? (
@@ -366,55 +461,126 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             opacity: textReveal,
           }}
         >
-          {/* Player Name */}
+          {/* Player Name with Glass Card */}
           <div
             style={{
-              ...styles.playerName,
-              color: 'white',
-              fontWeight: 'bold',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
+              background: 'rgba(0, 0, 0, 0.3)',
+              backdropFilter: 'blur(15px)',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              padding: format === 'youtube' ? '15px 25px' : '10px 20px',
+              marginBottom: '15px',
+              transform: `translateY(${20 - textReveal * 20}px)`,
             }}
           >
-            {safeRecord.player}
+            <div
+              style={{
+                ...styles.playerName,
+                color: textColors.playerName,
+                fontWeight: '300',
+                letterSpacing: '1px',
+                textShadow: `
+                  0 2px 8px rgba(0,0,0,0.7),
+                  0 0 15px ${textColors.rankGlow}
+                `,
+                margin: 0,
+              }}
+            >
+              {safeRecord.player}
+            </div>
           </div>
 
-          {/* Points */}
+          {/* Points with Enhanced Glass Card */}
           <div
             style={{
-              ...styles.points,
-              color: safeRecord.teamColors.secondary,
-              fontWeight: 'bold',
-              textShadow: '3px 3px 6px rgba(0,0,0,0.7)',
+              background: `linear-gradient(135deg, 
+                rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.2),
+                rgba(${parseInt(safeRecord.teamColors.secondary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(5, 7), 16)}, 0.1)
+              )`,
+              backdropFilter: 'blur(20px)',
+              borderRadius: '16px',
+              border: `1px solid rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.3)`,
+              padding: format === 'youtube' ? '20px 30px' : '15px 25px',
               opacity: pointsReveal,
-              transform: `scale(${0.8 + pointsReveal * 0.2})`,
+              transform: `translateY(${30 - pointsReveal * 30}px) scale(${0.9 + pointsReveal * 0.1})`,
             }}
           >
-            {safeRecord.points} POINTS
+            <div
+              style={{
+                ...styles.points,
+                color: textColors.pointsText,
+                fontWeight: '200',
+                letterSpacing: '2px',
+                textShadow: `
+                  0 0 20px ${textColors.pointsGlow},
+                  0 3px 6px rgba(0,0,0,0.8),
+                  0 0 30px ${textColors.pointsGlow}
+                `,
+                margin: 0,
+              }}
+            >
+              {safeRecord.points} POINTS
+            </div>
           </div>
 
-          {/* Game Details */}
+          {/* Game Details with Glass Card */}
           <div
             style={{
-              ...styles.details,
-              color: 'rgba(255,255,255,0.9)',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.7)',
+              background: 'rgba(0, 0, 0, 0.2)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              padding: format === 'youtube' ? '20px' : '15px',
+              marginTop: '15px',
+              transform: `translateY(${25 - textReveal * 25}px)`,
             }}
           >
-            <div style={{ marginBottom: '10px' }}>
-              <strong>{safeRecord.date}</strong>
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              vs {safeRecord.opponent}
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              {safeRecord.venue}
-            </div>
-            <div style={{ 
-              fontStyle: 'italic',
-              color: safeRecord.teamColors.secondary,
-              fontSize: format === 'youtube' ? '32px' : format === 'shorts' ? '22px' : '26px'
-            }}>
-              {safeRecord.context}
+            <div
+              style={{
+                ...styles.details,
+                color: textColors.detailsText,
+                textShadow: `
+                  0 1px 3px rgba(0,0,0,0.7),
+                  0 0 8px ${textColors.detailsAccent}
+                `,
+                margin: 0,
+              }}
+            >
+              <div style={{ 
+                marginBottom: '8px',
+                fontWeight: '300',
+                letterSpacing: '0.5px',
+                color: textColors.detailsAccent
+              }}>
+                <strong>{safeRecord.date}</strong>
+              </div>
+              <div style={{ 
+                marginBottom: '8px',
+                fontWeight: '300',
+                color: textColors.detailsText
+              }}>
+                vs {safeRecord.opponent}
+              </div>
+              <div style={{ 
+                marginBottom: '12px',
+                fontWeight: '300',
+                opacity: 0.85,
+                color: textColors.detailsText
+              }}>
+                {safeRecord.venue}
+              </div>
+              <div style={{ 
+                fontStyle: 'italic',
+                fontWeight: '200',
+                color: textColors.contextText,
+                fontSize: format === 'youtube' ? '28px' : format === 'shorts' ? '20px' : '24px',
+                textShadow: `
+                  0 0 15px ${textColors.contextText},
+                  0 2px 4px rgba(0,0,0,0.6)
+                `
+              }}>
+                {safeRecord.context}
+              </div>
             </div>
           </div>
         </div>
@@ -430,8 +596,11 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
               height: format === 'youtube' ? '200px' : '130px',
               borderRadius: '15px',
               overflow: 'hidden',
-              border: `3px solid ${safeRecord.teamColors.primary}`,
-              boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
+              border: `2px solid rgba(255, 255, 255, 0.2)`,
+              boxShadow: `
+                0 8px 32px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.5)
+              `,
               opacity: interpolate(safeFrame, [60, 90], [0, 1], { extrapolateRight: 'clamp' }),
             }}
           >
@@ -439,7 +608,10 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
               style={{
                 width: '100%',
                 height: '100%',
-                background: `linear-gradient(135deg, ${safeRecord.teamColors.primary}, ${safeRecord.teamColors.secondary})`,
+                background: `linear-gradient(135deg, 
+                  rgba(${parseInt(safeRecord.teamColors.primary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.primary.slice(5, 7), 16)}, 0.8),
+                  rgba(${parseInt(safeRecord.teamColors.secondary.slice(1, 3), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(3, 5), 16)}, ${parseInt(safeRecord.teamColors.secondary.slice(5, 7), 16)}, 0.6)
+                )`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
