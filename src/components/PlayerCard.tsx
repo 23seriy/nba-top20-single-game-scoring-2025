@@ -267,8 +267,8 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           textContainer: { flex: 1, justifyContent: 'center' as const },
           playerName: { fontSize: '72px', marginBottom: '20px' },
           points: { fontSize: '120px', marginBottom: '30px' },
-          details: { fontSize: '36px', lineHeight: '1.4' },
-          rank: { fontSize: '180px', position: 'absolute' as const, top: '40px', right: '60px' }
+          details: { fontSize: '50px', lineHeight: '1.4' },
+          rank: { fontSize: '200px', position: 'absolute' as const, top: '40px', right: '60px' }
         };
       case 'shorts':
         return {
@@ -277,7 +277,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           textContainer: { width: '100%', alignItems: 'center' as const },
           playerName: { fontSize: '68px', marginBottom: '15px', textAlign: 'center' as const },
           points: { fontSize: '90px', marginBottom: '20px' },
-          details: { fontSize: '44px', lineHeight: '1.3', textAlign: 'center' as const },
+          details: { fontSize: '54px', lineHeight: '1.3', textAlign: 'center' as const },
           rank: { fontSize: '140px', position: 'absolute' as const, top: '20px', right: '30px' }
         };
       case 'square':
@@ -287,7 +287,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
           textContainer: { width: '100%', alignItems: 'center' as const },
           playerName: { fontSize: '54px', marginBottom: '15px', textAlign: 'center' as const },
           points: { fontSize: '90px', marginBottom: '25px' },
-          details: { fontSize: '28px', lineHeight: '1.3', textAlign: 'center' as const },
+          details: { fontSize: '40px', lineHeight: '1.3', textAlign: 'center' as const },
           rank: { fontSize: '140px', position: 'absolute' as const, top: '30px', right: '40px' }
         };
     }
@@ -350,8 +350,8 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
             position: 'absolute',
             top: format === 'youtube' ? '30px' : '30px',
             left: format === 'youtube' ? '30px' : '30px',
-            width: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '150px',
-            height: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '150px',
+            width: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '200px',
+            height: format === 'youtube' ? '200px' : format === 'shorts' ? '200px' : '200px',
             borderRadius: '50%',
             overflow: 'hidden',
             border: '3px solid white',
@@ -399,7 +399,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
         >
           <div
             style={{
-              fontSize: format === 'youtube' ? '72px' : format === 'shorts' ? '64px' : '48px',
+              fontSize: format === 'youtube' ? '72px' : format === 'shorts' ? '70px' : '68px',
               fontWeight: '200',
               color: textColors.rankText,
               textShadow: `
@@ -573,7 +573,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
                 fontStyle: 'italic',
                 fontWeight: '200',
                 color: textColors.contextText,
-                fontSize: format === 'youtube' ? '28px' : format === 'shorts' ? '20px' : '24px',
+                fontSize: format === 'youtube' ? '48px' : format === 'shorts' ? '44px' : '44px',
                 textShadow: `
                   0 0 15px ${textColors.contextText},
                   0 2px 4px rgba(0,0,0,0.6)

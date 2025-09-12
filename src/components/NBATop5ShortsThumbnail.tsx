@@ -10,10 +10,20 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
   records = [],
   format = 'shorts'
 }) => {
-  // Get top 3 players for Shorts thumbnail
-  const topPlayers = records.slice(0, 3);
-  
-  // Get player images for overlay
+  // Get top 5 players for thumbnail
+  const topPlayers = records.slice(0, 5);
+
+  // Get Wilt Chamberlain background image
+  const getWiltBackgroundImage = (): string => {
+    try {
+      return require(`../assets/players/thumbnail_images/wilt_chamberlain.jpg`);
+    } catch (error) {
+      console.log('Wilt Chamberlain background image not found');
+      return '';
+    }
+  };
+
+  // Get player images
   const getPlayerImage = (imageName: string): string => {
     try {
       return require(`../assets/players/thumbnail_images/${imageName}`);
@@ -23,9 +33,11 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
     }
   };
   
-  const wiltImage = getPlayerImage('wilt_chamberlain.jpg');
+  const wiltBackgroundImage = getWiltBackgroundImage();
   const kobeImage = getPlayerImage('kobe_bryant.jpg');
   const lukaDoncicImage = getPlayerImage('luka_doncic.jpg');
+  const joelEmbiidImage = getPlayerImage('joel_embiid.jpg');
+  const devinBookerImage = getPlayerImage('devin_booker.jpg');
 
   // Dynamic text color system for Shorts thumbnails
   const getTextColors = () => {
@@ -57,7 +69,11 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       position: 'relative',
       fontFamily: 'Arial Black, Arial, sans-serif',
       overflow: 'hidden',
-      background: 'linear-gradient(135deg, #C8102E 0%, #1D428A 50%, #000000 100%)',
+      backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
+      backgroundColor: '#C8102E',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -77,6 +93,17 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
           }
         `}
       </style>
+
+      {/* Dark overlay for better text readability */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.7))',
+        zIndex: 1
+      }} />
 
       {/* Top Section - Title */}
       <div style={{
@@ -144,58 +171,16 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         </div>
       </div>
 
-      {/* Middle Section - Player Images */}
+      {/* Bottom Section - Player Images Overlay */}
       <div style={{
+        position: 'absolute',
+        bottom: '30px',
+        left: '30px',
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '20px',
-        zIndex: 2,
-        animation: 'float 3s ease-in-out infinite'
+        gap: '15px',
+        zIndex: 2
       }}>
-        {/* Wilt Chamberlain - Center (Largest) */}
-        {wiltImage && (
-          <div style={{
-            width: '280px',
-            height: '280px',
-            borderRadius: '50%',
-            overflow: 'hidden',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.6), 0 0 0 6px rgba(255,255,255,0.3)',
-            position: 'relative',
-            border: '4px solid #FFD700'
-          }}>
-            <img 
-              src={wiltImage} 
-              alt="Wilt Chamberlain"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
-            <div style={{
-              position: 'absolute',
-              bottom: '-8px',
-              right: '-8px',
-              backgroundColor: '#1D428A',
-              color: 'white',
-              borderRadius: '50%',
-              width: '50px',
-              height: '50px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              border: '3px solid white',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.4)'
-            }}>
-              #1
-            </div>
-          </div>
-        )}
-        
-        {/* Kobe Bryant - Left */}
+        {/* Kobe Bryant Image */}
         {kobeImage && (
           <div style={{
             width: '200px',

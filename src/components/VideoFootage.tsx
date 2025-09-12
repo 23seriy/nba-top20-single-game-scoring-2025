@@ -58,7 +58,7 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
   };
 
   // Generate video filename using rank-based naming convention
-  const getVideoPath = (playerName: string, rank: number): string => {
+  const getVideoPath = (playerName: string, rank: number, format: string): string => {
     try {
       const slug = playerName
         .toLowerCase()
@@ -68,13 +68,16 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
       
       const rankPadded = rank.toString().padStart(2, '0'); // 01, 02, etc.
       
+      // Use shorts-videos folder for shorts format, regular videos folder for others
+      const videoFolder = format === 'shorts' ? 'shorts-videos' : 'videos';
+      
       // Import the video directly from src/assets using rank-based naming
       try {
-        const videoPath = require(`../assets/players/videos/${rankPadded}-${slug}.mp4`);
-        console.log(`Loaded video for ${playerName} (rank ${rank}):`, videoPath);
+        const videoPath = require(`../assets/players/${videoFolder}/${rankPadded}-${slug}.mp4`);
+        console.log(`Loaded ${format} video for ${playerName} (rank ${rank}):`, videoPath);
         return videoPath;
       } catch (requireError) {
-        console.log(`No video found for ${playerName} at rank ${rank}, using fallback`);
+        console.log(`No ${format} video found for ${playerName} at rank ${rank}, using fallback`);
         return '';
       }
     } catch (error) {
@@ -201,7 +204,7 @@ export const VideoFootage: React.FC<VideoFootageProps> = ({ record, format }) =>
   };
 
   const styles = getLayoutStyles();
-  const videoPath = getVideoPath(safeRecord.player, safeRecord.rank);
+  const videoPath = getVideoPath(safeRecord.player, safeRecord.rank, format);
   const audioPath = getAudioPath(safeRecord.player, safeRecord.rank);
 
   // Debug logging
