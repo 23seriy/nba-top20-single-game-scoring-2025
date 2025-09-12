@@ -7,6 +7,7 @@ import {
 } from './components';
 import { NBATop15ScoringThumbnail } from './components/NBATop15ScoringThumbnail';
 import { NBATop5ShortsThumbnail } from './components/NBATop5ShortsThumbnail';
+import { ProfilePictureComposition } from '../profile-pictures/ProfilePictureComposition';
 import scoringData from '../data/top15_single_game_scoring.json';
 import { ScoringRecord } from './types';
 import { compositionDurations } from './utils/calculateTotalDuration';
@@ -101,6 +102,17 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         defaultProps={{ records: validatedData.slice(0, 5), format: 'shorts' }}
+      />
+
+      {/* Profile Picture Composition */}
+      <Composition
+        id="ProfilePicture-VintageRetroCourt"
+        component={ProfilePictureComposition}
+        durationInFrames={180}
+        fps={30}
+        width={400}
+        height={400}
+        defaultProps={{ concept: 'vintage-retro-court', size: 400 }}
       />
       
     </>
