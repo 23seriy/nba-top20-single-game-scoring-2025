@@ -272,7 +272,7 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
       
         {/* Subtitle */}
         <div style={{
-          fontSize: format === 'youtube' ? '56px' : '50px',
+          fontSize: format === 'youtube' ? '66px' : '70px',
           fontWeight: 'bold',
           color: textColors.subtitle.color,
           textShadow: textColors.subtitle.shadow,
@@ -288,28 +288,6 @@ export const NBATop15ScoringThumbnail: React.FC<NBATop15ScoringThumbnailProps> =
           backgroundClip: 'text'
         }}>
           SINGLE GAME SCORING
-        </div>
-      
-      
-      
-        {/* Call to Action */}
-        <div style={{
-          fontSize: format === 'youtube' ? '34px' : '30px',
-          color: textColors.cta.color,
-          textShadow: textColors.cta.shadow,
-          WebkitTextStroke: `1px ${textColors.cta.stroke}`,
-          fontWeight: '900',
-          textAlign: 'center',
-          textTransform: 'uppercase',
-          letterSpacing: '1px',
-          filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.4))',
-          background: `linear-gradient(45deg, ${textColors.cta.color}, rgba(255,107,53,0.8))`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          animation: format === 'youtube' ? 'pulse 2s ease-in-out infinite alternate' : 'none'
-        }}>
-          {'WATCH THE COUNTDOWN! 🏀'}
         </div>
       </div>
     </div>

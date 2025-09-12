@@ -10,4 +10,9 @@ package-lock.json
 # Ignore the output video from Git but not videos you import into src/.
 renders
 src/assets/players/videos/
+# Shorts-specific video files (large files)
 src/assets/players/shorts-videos/
+
+# Shorts-specific audio files
+src/assets/players/shorts-audio/
+src/assets/players/shorts-card-numbers/

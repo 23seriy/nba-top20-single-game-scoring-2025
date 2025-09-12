@@ -31,8 +31,8 @@ export const CountdownSection: React.FC<CountdownSectionProps> = ({
   };
 
   const getVideoDuration = (rank: number): number => {
-    // Use manual video duration configuration (default 50 seconds = 1500 frames)
-    return getVideoDurationInFrames(rank, fps);
+    // Use manual video duration configuration with format support
+    return getVideoDurationInFrames(rank, fps, format);
   };
 
   try {

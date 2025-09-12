@@ -69,11 +69,7 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       position: 'relative',
       fontFamily: 'Arial Black, Arial, sans-serif',
       overflow: 'hidden',
-      backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
       backgroundColor: '#C8102E',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -94,6 +90,20 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         `}
       </style>
 
+      {/* Background image positioned in top 66% only */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '66%',
+        backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat',
+        zIndex: 0
+      }} />
+
       {/* Dark overlay for better text readability */}
       <div style={{
         position: 'absolute',
@@ -101,7 +111,14 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         left: 0,
         width: '100%',
         height: '100%',
-        background: 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.7))',
+        background: `
+          linear-gradient(
+            to bottom,
+            transparent 0%,
+            transparent 66%,
+            rgba(0,0,0,0.9) 100%
+          )
+        `,
         zIndex: 1
       }} />
 
@@ -112,12 +129,12 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       }}>
         {/* Main Title */}
         <div style={{
-          fontSize: '110px',
+          fontSize: '120px',
           fontWeight: '900',
           color: textColors.mainTitle.color,
           textShadow: textColors.mainTitle.shadow,
           WebkitTextStroke: `3px ${textColors.mainTitle.stroke}`,
-          marginBottom: '20px',
+          marginBottom: '10px',
           textAlign: 'center',
           letterSpacing: '-3px',
           textTransform: 'uppercase',
@@ -133,7 +150,7 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       
         {/* Subtitle */}
         <div style={{
-          fontSize: '65px',
+          fontSize: '80px',
           fontWeight: 'bold',
           color: textColors.subtitle.color,
           textShadow: textColors.subtitle.shadow,
@@ -153,7 +170,7 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
 
         {/* Points Emphasis */}
         <div style={{
-          fontSize: '55px',
+          fontSize: '85px',
           fontWeight: 'bold',
           color: textColors.subtitle.color,
           textShadow: textColors.subtitle.shadow,
@@ -174,8 +191,8 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       {/* Bottom Section - Player Images Overlay */}
       <div style={{
         position: 'absolute',
-        bottom: '30px',
-        left: '30px',
+        bottom: '150px',
+        left: '40px',
         display: 'flex',
         gap: '15px',
         zIndex: 2
@@ -183,13 +200,11 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         {/* Kobe Bryant Image */}
         {kobeImage && (
           <div style={{
-            width: '200px',
-            height: '200px',
-            borderRadius: '50%',
+            width: '500px',
+            height: '500px',
             overflow: 'hidden',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.5), 0 0 0 4px rgba(255,255,255,0.2)',
+            boxShadow: '0 6px 20px rgba(0,0,0,0.5)',
             position: 'relative',
-            border: '3px solid #552583',
             transform: 'translateY(40px)'
           }}>
             <img 
@@ -225,13 +240,11 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         {/* Luka Dončić - Right */}
         {lukaDoncicImage && (
           <div style={{
-            width: '200px',
-            height: '200px',
-            borderRadius: '50%',
+            width: '500px',
+            height: '500px',
             overflow: 'hidden',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.5), 0 0 0 4px rgba(255,255,255,0.2)',
+            boxShadow: '0 6px 20px rgba(0,0,0,0.5)',
             position: 'relative',
-            border: '3px solid #00538C',
             transform: 'translateY(40px)'
           }}>
             <img 
@@ -263,31 +276,6 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
             </div>
           </div>
         )}
-      </div>
-
-      {/* Bottom Section - Call to Action */}
-      <div style={{
-        textAlign: 'center',
-        zIndex: 3
-      }}>
-        <div style={{
-          fontSize: '48px',
-          color: textColors.cta.color,
-          textShadow: textColors.cta.shadow,
-          WebkitTextStroke: `2px ${textColors.cta.stroke}`,
-          fontWeight: '900',
-          textAlign: 'center',
-          textTransform: 'uppercase',
-          letterSpacing: '2px',
-          filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.5))',
-          background: `linear-gradient(45deg, ${textColors.cta.color}, rgba(255,107,53,0.8))`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          animation: 'pulse 2.5s ease-in-out infinite alternate'
-        }}>
-          WATCH NOW! 🏀
-        </div>
       </div>
     </div>
   );

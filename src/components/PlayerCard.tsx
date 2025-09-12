@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AbsoluteFill, useVideoConfig, staticFile, Img, useCurrentFrame, interpolate, Audio } from 'remotion';
 import { Watermark } from './Watermark';
 import { ScoringRecord } from '../types';
-import { getCardNumberAudioPath } from '../utils/audioUtils';
+import { getCardNumberAudioPath, getAudioPath } from '../utils/audioUtils';
 
 interface PlayerCardProps {
   record: ScoringRecord;
@@ -84,7 +84,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ record, format, showGame
 
   const textColors = getTextColors();
 
-  // Get card number audio
+  // Get card number audio (use regular card numbers for all formats)
   const cardNumberAudio = getCardNumberAudioPath(safeRecord.rank);
   
   // Debug audio path
