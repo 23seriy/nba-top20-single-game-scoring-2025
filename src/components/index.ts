@@ -2,6 +2,7 @@ export { NBATop15ScoringYouTube } from './NBATop15ScoringYouTube';
 export { NBATop15ScoringShortsPart1 } from './NBATop15ScoringShortsPart1';
 export { NBATop15ScoringShortsPart2 } from './NBATop15ScoringShortsPart2';
 export { NBATop15ScoringSquare } from './NBATop15ScoringSquare';
+export { NBATop5ScoringShorts } from './NBATop5ScoringShorts';
 export { NBATop15ScoringThumbnail } from './NBATop15ScoringThumbnail';
 export { PlayerCard } from './PlayerCard';
 export { VideoFootage } from './VideoFootage';

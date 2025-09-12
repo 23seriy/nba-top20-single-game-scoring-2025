@@ -3,9 +3,11 @@ import { Composition } from 'remotion';
 import {
   NBATop15ScoringYouTube,
   NBATop15ScoringSquare,
-  NBATop15ScoringThumbnail
+  NBATop5ScoringShorts,
 } from './components';
-import scoringData from '../data/top20_single_game_scoring.json';
+import { NBATop15ScoringThumbnail } from './components/NBATop15ScoringThumbnail';
+import { NBATop5ShortsThumbnail } from './components/NBATop5ShortsThumbnail';
+import scoringData from '../data/top15_single_game_scoring.json';
 import { ScoringRecord } from './types';
 import { compositionDurations } from './utils/calculateTotalDuration';
 
@@ -77,6 +79,28 @@ export const RemotionRoot = () => {
         width={1080}
         height={1080}
         defaultProps={{ records: validatedData, format: 'square' }}
+      />
+
+      {/* YouTube Shorts Composition */}
+      <Composition
+        id="NBATop5Scoring-YouTubeShorts"
+        component={NBATop5ScoringShorts}
+        durationInFrames={compositionDurations.shorts}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ records: validatedData }}
+      />
+
+      {/* YouTube Shorts Thumbnail */}
+      <Composition
+        id="NBATop5Scoring-ShortsThumbnail"
+        component={NBATop5ShortsThumbnail}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ records: validatedData.slice(0, 5), format: 'shorts' }}
       />
       
     </>

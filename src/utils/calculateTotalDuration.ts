@@ -41,6 +41,9 @@ export const compositionDurations = {
   // Shorts Part 2: Players 7-1 (7 players) + 8 second end screen
   shortsPart2: calculateTotalDuration(7, 1, 240, 30),
   
+  // Shorts: Top 5 players + 8 second end screen
+  shorts: calculateTotalDuration(5, 1, 240, 30),
+  
   // Square: All 15 players + 8 second end screen
   square: calculateTotalDuration(15, 1, 240, 30),
 };
