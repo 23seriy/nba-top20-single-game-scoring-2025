@@ -44,8 +44,8 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
     return {
       mainTitle: {
         color: '#FFFFFF',
-        shadow: `0 0 40px rgba(255, 107, 53, 0.9), 0 0 80px rgba(255, 107, 53, 0.5), 6px 6px 15px rgba(0,0,0,0.9)`,
-        stroke: '#FF6B35'
+        shadow: `0 0 40px rgba(255, 77, 158, 0.9), 0 0 80px rgba(255, 77, 158, 0.5), 6px 6px 15px rgba(0,0,0,0.9)`,
+        stroke: '#FF4D9E'
       },
       subtitle: {
         color: '#FFD700',
@@ -53,8 +53,8 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         stroke: '#B8860B'
       },
       cta: {
-        color: '#FF6B35',
-        shadow: `0 0 25px rgba(255, 107, 53, 0.9), 0 0 50px rgba(255, 107, 53, 0.5), 3px 3px 8px rgba(0,0,0,0.8)`,
+        color: '#FF4D9E',
+        shadow: `0 0 25px rgba(255, 77, 158, 0.9), 0 0 50px rgba(255, 77, 158, 0.5), 3px 3px 8px rgba(0,0,0,0.8)`,
         stroke: '#CC5429'
       }
     };
@@ -69,7 +69,7 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
       position: 'relative',
       fontFamily: 'Arial Black, Arial, sans-serif',
       overflow: 'hidden',
-      backgroundColor: '#C8102E',
+      background: 'linear-gradient(135deg, #FF4D9E 0%, #8B3A8B 100%)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -90,19 +90,29 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         `}
       </style>
 
-      {/* Background image positioned in top 66% only */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '66%',
-        backgroundImage: wiltBackgroundImage ? `url(${wiltBackgroundImage})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'no-repeat',
-        zIndex: 0
-      }} />
+      {/* Wilt Chamberlain Background Image - Top 66% only */}
+      {wiltBackgroundImage && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '66%',
+          zIndex: 0
+        }}>
+          <img 
+            src={wiltBackgroundImage} 
+            alt="Wilt Chamberlain"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+              opacity: 0.4
+            }}
+          />
+        </div>
+      )}
 
       {/* Dark overlay for better text readability */}
       <div style={{
@@ -111,14 +121,7 @@ export const NBATop5ShortsThumbnail: React.FC<NBATop5ShortsThumbnailProps> = ({
         left: 0,
         width: '100%',
         height: '100%',
-        background: `
-          linear-gradient(
-            to bottom,
-            transparent 0%,
-            transparent 66%,
-            rgba(0,0,0,0.9) 100%
-          )
-        `,
+        background: 'linear-gradient(to bottom, transparent 0%, transparent 60%, rgba(0,0,0,0.4) 100%)',
         zIndex: 1
       }} />
 
